@@ -1,0 +1,25 @@
+---
+title: "Assessment 1"
+author: "Mitchell Wake"
+date: "2023-11-07"
+output: html_document
+  keep_md:true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(kableExtra)
+library(ggplot2)
+library(knitr)
+```
+
+```{r}
+df <- read.csv("data/owid-energy-data-cleaned-g20.csv")
+
+glimpse(df)
+```
+
