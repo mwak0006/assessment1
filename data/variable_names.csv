@@ -1,0 +1,6 @@
+﻿Variable Names,Description
+country,Geographic location
+year,Year of observation
+iso_code,ISO 3166-1 alpha-3 three-letter country codes
+energy_per_capita,"Primary energy consumption per capita, measured in kilowatt-hours"
+energy_per_gdp,Energy consumption per unit of GDP. This is measured in kilowatt-hours per 2011 international convention

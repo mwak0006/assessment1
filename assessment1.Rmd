@@ -3,23 +3,87 @@ title: "Assessment 1"
 author: "Mitchell Wake"
 date: "2023-11-07"
 output: html_document
-  keep_md:true
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
+```{r, include=FALSE}
 library(tidyverse)
 library(kableExtra)
 library(ggplot2)
 library(knitr)
+df <- read.csv("data/owid-energy-data-cleaned-g20.csv")
 ```
 
+# Research Question
+
+In this report we will investigate the energy production per capita of the countries in the G20 and how it has changed over time
+
+# Data set Introduction
+
+The dataset used in this report is from Our World in Data https://ourworldindata.org/energy
+ and has been cleaned to contain
+
+to contain data for each of the G20 countries energy consumption per capita and energy per gdp from 1985 to 2018.
+
+The cleaned data can be accessed from "Data/owid-energy-data-cleaned-g20.csv"
+
+The dataset contains the following variables 
+
 ```{r}
-df <- read.csv("data/owid-energy-data-cleaned-g20.csv")
+kable(variable.names(df),col.names = "Variable Names") %>% kable_styling(bootstrap_options = c("striped"))
+```
+
+- country
+
+- year
+
+
+
+
+# Data Set Description
+
+The number of variables in the dataset is `r ncol(df)` and the number of observations is `r nrow(df)`
+
+```{r include=FALSE}
+knitr::include_graphics(path="image/screenshot.png")
+```
+
+
+
+```{r}
+str(df,2)
+```
+
+# Data Summary
+
+```{r}
+
 
 glimpse(df)
 ```
 
+
+```{r}
+df %>% group_by(country) %>% summarise('Average kWh/Capita'=mean(energy_per_capita), 'Average kWh/GDP'=mean(energy_per_gdp)) %>% head(10) %>% kable(caption="Average Energy Consumption (kWh) by Capita and GDP fron 1985 to 2018")
+```
+
+```{r}
+df %>% ggplot(aes(year,energy_per_capita)) + 
+  geom_point() + 
+  facet_wrap(~country, scales = "free_y") +
+  scale_x_continuous(breaks=seq(1985, 2018,6)) +
+  guides(x = guide_axis(angle = 90)) +
+  ylab("Energy Consumption (kWh) per Capita") +
+  labs(title="G20 Countries Energy Consumption per Capita from 1985 to 2018")
+
+```
+
+
+
+
+
+The raw data can be accessed from
+https://nyc3.digitaloceanspaces.com/owid-public/data/energy/owid-energy-data.csv
