@@ -14,26 +14,26 @@ library(tidyverse)
 library(kableExtra)
 library(ggplot2)
 library(knitr)
-df <- read.csv("data/owid-energy-data-cleaned-g20.csv")
+df <- read.csv("data/owid-energy-data-cleaned-top10.csv")
 ```
 
 # Research Question
 
-In this report we will investigate the energy production per capita of the countries in the G20 and how it has changed over time
+In this report we will investigate the energy consumption per capita and per GDP of the top 10 countries by energy consumption and how it has changed over time.
 
 # Data set Introduction
 
-The dataset used in this report is from Our World in Data https://ourworldindata.org/energy
- and has been cleaned to contain
+The dataset used in this report has been compiled from Our [World in Data Energy Dataset](https://ourworldindata.org/energy).
+It contains data for each of the 10 Countries Energy Consumption in kilowatt hours (kWh) per Capita and per GDP for every year from 1985 to 2018.
 
-to contain data for each of the G20 countries energy consumption per capita and energy per gdp from 1985 to 2018.
 
 The cleaned data can be accessed from "Data/owid-energy-data-cleaned-g20.csv"
 
-The dataset contains the following variables 
+The dataset contains the following variables.
 
 ```{r}
-kable(variable.names(df),col.names = "Variable Names") %>% kable_styling(bootstrap_options = c("striped"))
+var_names <- read.csv('data/variable_names.csv')
+kable(var_names) %>% kable_styling(bootstrap_options = c("striped"))
 ```
 
 - country
@@ -60,8 +60,6 @@ str(df,2)
 # Data Summary
 
 ```{r}
-
-
 glimpse(df)
 ```
 
@@ -81,6 +79,13 @@ df %>% ggplot(aes(year,energy_per_capita)) +
 
 ```
 
+```{r}
+df_avg <- df %>% group_by(country) %>% 
+  summarise('Average kWh/Capita'=mean(energy_per_capita), 'Average kWh/GDP'=mean(energy_per_gdp))
+
+ggplot(df_avg,aes(x=`Average kWh/Capita`,y=`Average kWh/GDP`, colour=country)) + 
+  geom_point()
+```
 
 
 
