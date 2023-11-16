@@ -18,77 +18,82 @@ df <- read.csv("data/owid-energy-data-cleaned-top10.csv")
 ```
 
 # Research Question
-
-In this report we will investigate the energy consumption per capita and per GDP of the top 10 countries by energy consumption and how it has changed over time.
+This report will examine the historical trends in population numbers alongside per capita energy consumption in the ten nations with the highest energy consumption.
 
 # Data set Introduction
 
-The dataset used in this report has been compiled from Our [World in Data Energy Dataset](https://ourworldindata.org/energy).
-It contains data for each of the 10 Countries Energy Consumption in kilowatt hours (kWh) per Capita and per GDP for every year from 1985 to 2018.
+The dataset used in this report has been extracted and cleaned from [Our World in Data Energy Dataset](https://ourworldindata.org/energy).
+It contains data for 10 Countries Energy Consumption in kilowatt hours (kWh) per Capita and population numbers for every year from 1985 to 2022.
 
 
-The cleaned data can be accessed from "Data/owid-energy-data-cleaned-g20.csv"
+The cleaned data can be accessed and downloaded locally from [here.](Data/owid-energy-data-cleaned-top10.csv)
 
-The dataset contains the following variables.
+Alternatively the raw data can be downloaded from [here.](https://nyc3.digitaloceanspaces.com/owid-public/data/energy/owid-energy-data.csv)
 
-```{r}
+
+The data set contains the following variables.
+
+```{r echo=FALSE}
 var_names <- read.csv('data/variable_names.csv')
-kable(var_names) %>% kable_styling(bootstrap_options = c("striped"))
+kable(var_names) %>% kable_styling(full_width = FALSE, position = "left")
 ```
-
-- country
-
-- year
-
-
 
 
 # Data Set Description
 
-The number of variables in the dataset is `r ncol(df)` and the number of observations is `r nrow(df)`
+The number of variables in the dataset is `r ncol(df)` and the number of observations is `r nrow(df)`.
 
-```{r include=FALSE}
+```{r echo=FALSE}
 knitr::include_graphics(path="image/screenshot.png")
 ```
 
 
+Using the function str() the below table shows the types of variables and the first two observations for each variable.
 
-```{r}
-str(df,2)
+```{r, echo=FALSE}
+str(head(df,2))
 ```
 
 # Data Summary
+To examine the historical trends of population and Energy Consumption per capita we have calculated the average energy consumption per capita and average population size for each country between 1985 to 2022. Additionally we have calculated the average growth rates for both variables over this time period.
 
-```{r}
-glimpse(df)
+```{r echo=FALSE}
+df %>%
+  group_by(country) %>%
+  arrange(year) %>%
+  summarise('Avg kWh/Capita' = paste0(format(round(mean(energy_per_capita), 2),big.mark=",")),
+            'Avg kWh/Capita Growth' = paste0(round(((last(energy_per_capita) / first(energy_per_capita))^(1 / (n() - 1)) - 1) * 100, 2), "%"),
+            'Avg Population (Millions)' = paste0(round(mean(population / 1e6), 2), "M"),
+            'Avg Population Growth' = paste0(round(((last(population) / first(population))^(1 / (n() - 1)) - 1) * 100, 2), "%")) %>%
+  head(10) %>%
+  kable(caption = "Countries Average and Standard Deviation of Energy Consumption (kWh) by Capita and Population (Millions) from 1985 to 2022") %>%
+  kable_styling(full_width = FALSE, position = "left")
 ```
+**Observations**
+
+We observe from the data summary that all 10 countries have **positive** population growth rates over the time period, however they do not all have positive growth in there energy consumption per capita. Five countries; Canada, France, Germany, Russia and the United States have had **negative** average growth in their energy consumption per capita.
 
 
-```{r}
-df %>% group_by(country) %>% summarise('Average kWh/Capita'=mean(energy_per_capita), 'Average kWh/GDP'=mean(energy_per_gdp)) %>% head(10) %>% kable(caption="Average Energy Consumption (kWh) by Capita and GDP fron 1985 to 2018")
-```
+# Visualisation
 
-```{r}
+
+```{r echo=FALSE}
 df %>% ggplot(aes(year,energy_per_capita)) + 
   geom_point() + 
   facet_wrap(~country, scales = "free_y") +
-  scale_x_continuous(breaks=seq(1985, 2018,6)) +
+  scale_x_continuous(breaks=seq(1985, 2022,6)) +
   guides(x = guide_axis(angle = 90)) +
   ylab("Energy Consumption (kWh) per Capita") +
-  labs(title="G20 Countries Energy Consumption per Capita from 1985 to 2018")
+  labs(title="G20 Countries Energy Consumption per Capita from 1985 to 2022")
 
 ```
 
-```{r}
-df_avg <- df %>% group_by(country) %>% 
-  summarise('Average kWh/Capita'=mean(energy_per_capita), 'Average kWh/GDP'=mean(energy_per_gdp))
+**Description of Figure**
 
-ggplot(df_avg,aes(x=`Average kWh/Capita`,y=`Average kWh/GDP`, colour=country)) + 
-  geom_point()
-```
+* *Brazil, China, India and South Korea have steadily increased Energy Consumption per Capita since 1985. While Germany has been steadily declining since 1985.*
+* *Canada, France, Japan and the United States Energy Consumption per Capita increased until approx 2003 then has steadily declined.Russia's consumption decreased until 1997 and has steadily been increasing since.*
 
 
+# Conclusion
+In conclusion, our analysis of the 10 largest energy-consuming nations reveals intriguing trends in population and energy consumption per capita from 1985 to 2022. Notably, all countries experienced positive population growth, yet different patterns emerged in energy consumption per capita. Canada, France, Germany, Russia, and the United States displayed negative average growth in this metric. Brazil, China, India, South Korea and Japan demonstrated consistent increases in energy consumption per capita. Moreover, Canada, France, Japan, and the United States initially saw rising energy consumption per capita until around 2003, followed by a sustained decline. Conversely, Russia's consumption decreased until 1997 before steadily increasing. Canada had the smallest average population and the highest energy consumption per capita, while India had the second largest population and the smallest energy consumption per capita. These differences in energy consumption trends among countries underscore the variety of factors that influence energy usage.
 
-
-The raw data can be accessed from
-https://nyc3.digitaloceanspaces.com/owid-public/data/energy/owid-energy-data.csv
