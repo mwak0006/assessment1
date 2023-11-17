@@ -2,7 +2,11 @@
 title: "Assessment 1"
 author: "Mitchell Wake"
 date: "2023-11-07"
-output: html_document
+output: 
+  bookdown::html_document2:
+    css: "style.css"
+    number_sections: false 
+bibliography: references.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -19,18 +23,12 @@ df <- read.csv("data/owid-energy-data-cleaned-top10.csv")
 
 # Research Question
 
-Global energy demand has been growing consistently as populations increase and societies get wealthier (Ritchie, Rosado, & Roser, 2023). This report will examine the historical trends in population numbers alongside per capita energy consumption of the ten nations with the highest energy consumption in 2021.
+Global energy demand has been growing consistently as populations increase and societies get wealthier [@OWD]. This report will examine the historical trends in population numbers alongside per capita energy consumption of the ten nations with the highest energy consumption in 2021.
 
-# Data set Introduction
+# Data Set Introduction
 
 The dataset used in this report has been extracted and cleaned from [Our World in Data Energy Dataset](https://ourworldindata.org/energy).
-It contains data for 10 Countries Energy Consumption in kilowatt hours (kWh) per Capita and population numbers for every year from 1985 to 2022.
-
-
-The cleaned data can be accessed and downloaded locally from [here.](Data/owid-energy-data-cleaned-top10.csv)
-
-Alternatively the raw data can be downloaded online from [here.](https://nyc3.digitaloceanspaces.com/owid-public/data/energy/owid-energy-data.csv)
-
+It contains data for 10 Countries Energy Consumption in kilowatt hours (kWh) per Capita and population numbers for every year from 1985 to 2022. The cleaned data can be accessed and downloaded locally from [here.](Data/owid-energy-data-cleaned-top10.csv)
 
 The data set contains the following variables.
 
@@ -44,22 +42,21 @@ kable(var_names) %>% kable_styling(full_width = FALSE, position = "left")
 
 The number of variables in the dataset is `r ncol(df)` and the number of observations is `r nrow(df)`.
 
-```{r}
+```{r screenshot, fig.cap="r inline code"}
 knitr::include_graphics(path="image/screenshot.png")
 ```
 
 
 The below table shows the types of variables and the first two observations for each variable.
 
-```{r}
+```{r var_types, fig.cap="Variable Types"}
 str(head(df,2))
 ```
 
 # Data Summary
-To examine the historical trends of population and energy consumption we have calculated the average energy consumption per capita and average population size for each country between 1985 to 2022. Additionally we have calculated the average growth rates for both variables over this time period.
+To examine the historical trends of population and energy consumption we have calculated the average energy consumption per capita and average population size for each country between 1985 to 2022. Additionally we have calculated the average growth rates for both variables over this time period. See \@ref(tab:table1).
 
-**Table 1**
-```{r table1}
+```{r table1, fig.cap="Data Summary Table"}
 df %>%
   group_by(country) %>%
   arrange(year) %>%
@@ -71,16 +68,10 @@ df %>%
   kable(caption = "Countries Average and Standard Deviation of Energy Consumption (kWh) by Capita and Population (Millions) from 1985 to 2022") %>%
   kable_styling(full_width = FALSE, position = "left")
 ```
-**Observations**
 
-We observe from the data summary that all 10 countries have **positive** population growth rates over the time period, however they do not all have positive growth in energy consumption per capita. Five countries; Canada, France, Germany, Russia and the United States have had **negative** average growth in energy consumption per capita.
+The second table \@ref(tab:table2) aggregates the data on a per year basis and provides the Averages and Totals of Energy Consumption (kWh) by Capita and Population (Millions) Number for each year from 1985 to 2022.
 
-
-**Table 2**
-
-The below table aggregates the data on a per year basis and provides the Averages and Totals of Energy Consumption (kWh) by Capita and Population (Millions) Number for each year from 1985 to 2022.
-
-```{r table2}
+```{r table2, fig.cap="Data Summary Aggregated"}
 df %>% 
 summarise('Avg kWh/Capita' = paste0(format(round(mean(energy_per_capita), 2),big.mark=",")),
             'Avg kWh/Capita Growth' = paste0(round(((last(energy_per_capita) / first(energy_per_capita))^(1 / (n() - 1)) - 1) * 100, 2), "%"),
@@ -91,10 +82,12 @@ summarise('Avg kWh/Capita' = paste0(format(round(mean(energy_per_capita), 2),big
 
 ```
 
+**Observations**
+We observe from the data summary that all 10 countries have **positive** population growth rates over the time period, however they do not all have positive growth in energy consumption per capita. Five countries; Canada, France, Germany, Russia and the United States have had **negative** average growth in energy consumption per capita. As an aggregate energy consumption and population numbers increased **positively** over the time period.
 
 # Visualisation
 
-```{r}
+```{r figure1, fig.cap="Energy Consumption per Capita from 1985 to 2022"}
 df %>% ggplot(aes(year,energy_per_capita)) + 
   geom_point() + 
   facet_wrap(~country, scales = "free_y") +
@@ -112,7 +105,7 @@ df %>% ggplot(aes(year,energy_per_capita)) +
 
 **Figure 2**
 
-```{r, warning=FALSE}
+```{r figure2, fig.cap= "Aggregate Energy Consumption and Population Numbers", warning=FALSE}
 df_avg_sum <- df %>% group_by(year) %>% 
   summarise('Avg_kWh'=round(mean(energy_per_capita),2),
             'Sum_kWh'=round(sum(energy_per_capita),2),
@@ -140,5 +133,9 @@ In conclusion, our analysis of the 10 largest energy-consuming nations reveals i
 
 # References
 
+---
+nocite: |
+  @owid-energy
+---
 
 
