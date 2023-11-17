@@ -19,8 +19,7 @@ df <- read.csv("data/owid-energy-data-cleaned-top10.csv")
 
 # Research Question
 
-Studying how population changes align with individual energy use in the top-ten energy-consuming nations helps us understand the link between people and energy use in society.
-This report will examine the historical trends in population numbers alongside per capita energy consumption of the ten nations with the highest energy consumption in 2021.
+Global energy demand has been growing consistently as populations increase and societies get wealthier (Ritchie, Rosado, & Roser, 2023). This report will examine the historical trends in population numbers alongside per capita energy consumption of the ten nations with the highest energy consumption in 2021.
 
 # Data set Introduction
 
@@ -35,7 +34,7 @@ Alternatively the raw data can be downloaded online from [here.](https://nyc3.di
 
 The data set contains the following variables.
 
-```{r echo=FALSE}
+```{r}
 var_names <- read.csv('data/variable_names.csv')
 kable(var_names) %>% kable_styling(full_width = FALSE, position = "left")
 ```
@@ -45,22 +44,22 @@ kable(var_names) %>% kable_styling(full_width = FALSE, position = "left")
 
 The number of variables in the dataset is `r ncol(df)` and the number of observations is `r nrow(df)`.
 
-```{r echo=FALSE}
+```{r}
 knitr::include_graphics(path="image/screenshot.png")
 ```
 
 
-Using the function str() the below table shows the types of variables and the first two observations for each variable.
+The below table shows the types of variables and the first two observations for each variable.
 
-```{r, echo=FALSE}
+```{r}
 str(head(df,2))
 ```
 
 # Data Summary
-To examine the historical trends of population and Energy Consumption per capita we have calculated the average energy consumption per capita and average population size for each country between 1985 to 2022. Additionally we have calculated the average growth rates for both variables over this time period.
+To examine the historical trends of population and energy consumption we have calculated the average energy consumption per capita and average population size for each country between 1985 to 2022. Additionally we have calculated the average growth rates for both variables over this time period.
 
 **Table 1**
-```{r echo=FALSE}
+```{r table1}
 df %>%
   group_by(country) %>%
   arrange(year) %>%
@@ -74,14 +73,14 @@ df %>%
 ```
 **Observations**
 
-We observe from the data summary that all 10 countries have **positive** population growth rates over the time period, however they do not all have positive growth in there energy consumption per capita. Five countries; Canada, France, Germany, Russia and the United States have had **negative** average growth in their energy consumption per capita.
+We observe from the data summary that all 10 countries have **positive** population growth rates over the time period, however they do not all have positive growth in energy consumption per capita. Five countries; Canada, France, Germany, Russia and the United States have had **negative** average growth in energy consumption per capita.
 
 
 **Table 2**
 
 The below table aggregates the data on a per year basis and provides the Averages and Totals of Energy Consumption (kWh) by Capita and Population (Millions) Number for each year from 1985 to 2022.
 
-```{r table 2, echo=FALSE}
+```{r table2}
 df %>% 
 summarise('Avg kWh/Capita' = paste0(format(round(mean(energy_per_capita), 2),big.mark=",")),
             'Avg kWh/Capita Growth' = paste0(round(((last(energy_per_capita) / first(energy_per_capita))^(1 / (n() - 1)) - 1) * 100, 2), "%"),
@@ -95,7 +94,7 @@ summarise('Avg kWh/Capita' = paste0(format(round(mean(energy_per_capita), 2),big
 
 # Visualisation
 
-```{r echo=FALSE}
+```{r}
 df %>% ggplot(aes(year,energy_per_capita)) + 
   geom_point() + 
   facet_wrap(~country, scales = "free_y") +
@@ -113,7 +112,7 @@ df %>% ggplot(aes(year,energy_per_capita)) +
 
 **Figure 2**
 
-```{r, echo=FALSE, warning=FALSE}
+```{r, warning=FALSE}
 df_avg_sum <- df %>% group_by(year) %>% 
   summarise('Avg_kWh'=round(mean(energy_per_capita),2),
             'Sum_kWh'=round(sum(energy_per_capita),2),
