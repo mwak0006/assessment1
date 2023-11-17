@@ -28,7 +28,7 @@ It contains data for 10 Countries Energy Consumption in kilowatt hours (kWh) per
 
 The cleaned data can be accessed and downloaded locally from [here.](Data/owid-energy-data-cleaned-top10.csv)
 
-Alternatively the raw data can be downloaded from [here.](https://nyc3.digitaloceanspaces.com/owid-public/data/energy/owid-energy-data.csv)
+Alternatively the raw data can be downloaded online from [here.](https://nyc3.digitaloceanspaces.com/owid-public/data/energy/owid-energy-data.csv)
 
 
 The data set contains the following variables.
@@ -57,6 +57,7 @@ str(head(df,2))
 # Data Summary
 To examine the historical trends of population and Energy Consumption per capita we have calculated the average energy consumption per capita and average population size for each country between 1985 to 2022. Additionally we have calculated the average growth rates for both variables over this time period.
 
+**Table 1**
 ```{r echo=FALSE}
 df %>%
   group_by(country) %>%
@@ -75,13 +76,16 @@ We observe from the data summary that all 10 countries have **positive** populat
 
 
 **Table 2**
+
+The below table aggregates the data on a per year basis and provides the Averages and Totals of Energy Consumption (kWh) by Capita and Population (Millions) Number for each year from 1985 to 2022.
+
 ```{r table 2, echo=FALSE}
 df %>% 
 summarise('Avg kWh/Capita' = paste0(format(round(mean(energy_per_capita), 2),big.mark=",")),
             'Avg kWh/Capita Growth' = paste0(round(((last(energy_per_capita) / first(energy_per_capita))^(1 / (n() - 1)) - 1) * 100, 2), "%"),
             'Avg Population (Millions)' = paste0(round(mean(population / 1e6), 2), "M"),
             'Avg Population Growth' = paste0(round(((last(population) / first(population))^(1 / (n() - 1)) - 1) * 100, 2), "%")) %>% 
-  kable(caption="Aggregate Averages and Totals of Energy Consumption (kWh) by Capita and Population (Millions) Number fron 1985 to 2022") %>%
+  kable(caption="All 10 Countries Averages and Growth Rates of Energy Consumption (kWh) by Capita and Population (Millions)") %>%
   kable_styling(full_width = FALSE, position = "left")
 
 ```
@@ -89,15 +93,14 @@ summarise('Avg kWh/Capita' = paste0(format(round(mean(energy_per_capita), 2),big
 
 # Visualisation
 
-
 ```{r echo=FALSE}
 df %>% ggplot(aes(year,energy_per_capita)) + 
   geom_point() + 
   facet_wrap(~country, scales = "free_y") +
   scale_x_continuous(breaks=seq(1985, 2022,6)) +
   guides(x = guide_axis(angle = 90)) +
-  ylab("Energy Consumption (kWh) per Capita") +
-  labs(title="G20 Countries Energy Consumption per Capita from 1985 to 2022")
+  ylab("Energy Consumption (kWh)/ Capita") +
+  labs(title="Energy Consumption per Capita from 1985 to 2022")
 
 ```
 
@@ -129,9 +132,6 @@ ggplot(df_avg_sum,aes(x=year)) +
   scale_x_continuous(breaks=seq(1985, 2022,3)) +
   labs(title="Total Energy Consumption per Capita from 1985 to 2022", subtitle = "Aggregate data from the 10 largest Nations by Energy Consumption")
 ```
-
-
-
 
 # Conclusion
 In conclusion, our analysis of the 10 largest energy-consuming nations reveals intriguing trends in population and energy consumption per capita from 1985 to 2022. Notably, all countries experienced positive population growth, yet different patterns emerged in energy consumption per capita. Canada, France, Germany, Russia, and the United States displayed negative average growth in this metric. Brazil, China, India, South Korea and Japan demonstrated consistent increases in energy consumption per capita. Moreover, Canada, France, Japan, and the United States initially saw rising energy consumption per capita until around 2003, followed by a sustained decline. Conversely, Russia's consumption decreased until 1997 before steadily increasing. Canada had the smallest average population and the highest energy consumption per capita, while India had the second largest population and the smallest energy consumption per capita. These differences in energy consumption trends among countries underscore the variety of factors that influence energy usage.
