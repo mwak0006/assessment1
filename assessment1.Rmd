@@ -18,7 +18,9 @@ df <- read.csv("data/owid-energy-data-cleaned-top10.csv")
 ```
 
 # Research Question
-This report will examine the historical trends in population numbers alongside per capita energy consumption in the ten nations with the highest energy consumption.
+
+Studying how population changes align with individual energy use in the top-ten energy-consuming nations helps us understand the link between people and energy use in society.
+This report will examine the historical trends in population numbers alongside per capita energy consumption of the ten nations with the highest energy consumption in 2021.
 
 # Data set Introduction
 
@@ -134,5 +136,10 @@ ggplot(df_avg_sum,aes(x=year)) +
 
 
 # Conclusion
+
 In conclusion, our analysis of the 10 largest energy-consuming nations reveals intriguing trends in population and energy consumption per capita from 1985 to 2022. Notably, all countries experienced positive population growth, yet different patterns emerged in energy consumption per capita. Canada, France, Germany, Russia, and the United States displayed negative average growth in this metric. Brazil, China, India, South Korea and Japan demonstrated consistent increases in energy consumption per capita. Moreover, Canada, France, Japan, and the United States initially saw rising energy consumption per capita until around 2003, followed by a sustained decline. Conversely, Russia's consumption decreased until 1997 before steadily increasing. Canada had the smallest average population and the highest energy consumption per capita, while India had the second largest population and the smallest energy consumption per capita. These differences in energy consumption trends among countries underscore the variety of factors that influence energy usage.
+
+# References
+
+
 
