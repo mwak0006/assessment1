@@ -83,8 +83,8 @@ summarise('Avg kWh/Capita' = paste0(format(round(mean(energy_per_capita), 2),big
             'Avg kWh/Capita Growth' = paste0(round(((last(energy_per_capita) / first(energy_per_capita))^(1 / (n() - 1)) - 1) * 100, 2), "%"),
             'Avg Population (Millions)' = paste0(round(mean(population / 1e6), 2), "M"),
             'Avg Population Growth' = paste0(round(((last(population) / first(population))^(1 / (n() - 1)) - 1) * 100, 2), "%")) %>% 
-  kable(caption="Aggregate Averages and Totals of Energy Consumption (kWh) by Capita and Population (Millions) Number fron 1985 to 2022") %>%
-  kable_styling(full_width = FALSE, position = "left")
+  kable(caption="Aggregate Averages and Growth Rates all Countries") %>%
+  kable_styling()
 
 ```
 
