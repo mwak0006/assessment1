@@ -27,8 +27,7 @@ Global energy demand has been growing consistently as populations increase and s
 
 # Data Set Introduction
 
-The dataset used in this report has been extracted and cleaned from [Our World in Data Energy Dataset](https://ourworldindata.org/energy).
-It contains data for 10 Countries Energy Consumption in kilowatt hours (kWh) per Capita and population numbers for every year from 1985 to 2022. The cleaned data can be accessed and downloaded locally from [here.](Data/owid-energy-data-cleaned-top10.csv)
+The dataset used in this report has been extracted and cleaned from [Our World in Data Energy Dataset](https://ourworldindata.org/energy). It contains data for 10 Countries Energy Consumption in kilowatt hours (kWh) per Capita and population numbers for every year from 1985 to 2022. The cleaned data can be accessed and downloaded locally from [here.](Data/owid-energy-data-cleaned-top10.csv)
 
 The data set contains the following variables.
 
@@ -45,7 +44,6 @@ The number of variables in the dataset is `r ncol(df)` and the number of observa
 ```{r screenshot, fig.cap="r inline code"}
 knitr::include_graphics(path="image/screenshot.png")
 ```
-
 
 The below table shows the types of variables and the first two observations for each variable.
 
@@ -87,7 +85,7 @@ We observe from the data summary that all 10 countries have **positive** populat
 
 # Visualisation
 
-```{r figure1, fig.cap="Energy Consumption per Capita from 1985 to 2022"}
+```{r figure1, out.width= "80%", fig.cap="Energy Consumption per Capita from 1985 to 2022"}
 df %>% ggplot(aes(year,energy_per_capita)) + 
   geom_point() + 
   facet_wrap(~country, scales = "free_y") +
@@ -98,34 +96,36 @@ df %>% ggplot(aes(year,energy_per_capita)) +
 
 ```
 
-**Description of Figure**
-
-* *Brazil, China, India and South Korea have steadily increased Energy Consumption per Capita since 1985. While Germany has been steadily declining since 1985.*
-* *Canada, France, Japan and the United States Energy Consumption per Capita increased until approx 2003 then has steadily declined.Russia's consumption decreased until 1997 and has steadily been increasing since.*
-
-**Figure 2**
-
-```{r figure2, fig.cap= "Aggregate Energy Consumption and Population Numbers", warning=FALSE}
+```{r aggregate_df, echo=FALSE}
 df_avg_sum <- df %>% group_by(year) %>% 
   summarise('Avg_kWh'=round(mean(energy_per_capita),2),
             'Sum_kWh'=round(sum(energy_per_capita),2),
-            'Sum_Population_M'= round(sum(population/1e6),2)) 
-  
-  
+            'Sum_Population_M'= round(sum(population/1e6),2))
+```
+
+```{r figure2, out.width= "60%", fig.cap= "Aggregate Energy Consumption and Population Numbers", warning=FALSE}
 ggplot(df_avg_sum,aes(x=year)) + 
   geom_line(aes(y=Sum_kWh),colour="black", size = 1) +
   geom_line(aes(y=Sum_Population_M*130),colour='blue', size=1) +
   scale_y_continuous(
-    
-    # Features of the first axis
     name = "Total Energy (kWh) per Capita",
-    
-    # Add a second axis and specify its features
-    sec.axis = sec_axis(~. /130,name="Total Population (Millions)")
-  ) + 
+    sec.axis = sec_axis(~. /130,name="Total Population (Millions)"))+
   scale_x_continuous(breaks=seq(1985, 2022,3)) +
   labs(title="Total Energy Consumption per Capita from 1985 to 2022", subtitle = "Aggregate data from the 10 largest Nations by Energy Consumption")
 ```
+
+**Description of Figures**
+
+Refering to figure \@ref(fig:figure1) it shows that:
+
+* *Brazil, China, India and South Korea have steadily increased Energy Consumption per Capita since 1985. While Germany has been steadily declining since 1985.*
+* *Canada, France, Japan and the United States Energy Consumption per Capita increased until approx 2003 then has steadily declined.Russia's consumption decreased until 1997 and has steadily been increasing since.*
+
+The figure \@ref(fig:figure2) shows the:
+
+* *Aggregate energy consumption has increased since 1985 and has had periods of decline but overall trended upwards*
+* *Aggregate population numbers has increased consistently since 1985.*
+
 
 # Conclusion
 
