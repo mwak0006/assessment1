@@ -61,11 +61,11 @@ df %>% group_by(country) %>% arrange(year) %>%
             'Avg Population (Millions)' = paste0(round(mean(population / 1e6), 2), "M"),
             'Avg Population Growth' = paste0(round(((last(population) / first(population))^(1 / (n() - 1)) - 1) * 100, 2), "%")) %>%
   head(10) %>%
-  kable(caption = "Countries Average and Standard Deviation of Energy Consumption (kWh) by Capita and Population (Millions) from 1985 to 2022") %>%
+  kable(caption = "Countries Average Energy Consumption (kWh) by Capita and Population (Millions) from 1985 to 2022") %>%
   kable_classic(full_width = FALSE, position = "left")
 ```
 
-The second table \@ref(tab:table2) aggregates the country data and provides the Averages and Totals of Energy Consumption (kWh) by Capita and Population (Millions) Number.
+The second table \@ref(tab:table2) shows the same metrics except as an aggregate of the ten counrties.
 
 ```{r table2, fig.cap="Data Summary Aggregated"}
 df %>% 
@@ -102,10 +102,10 @@ df_avg_sum <- df %>% group_by(year) %>%
             'Sum_Population_M'= round(sum(population/1e6),2))
 ```
 
-```{r figure2, out.width= "60%", fig.cap= "Aggregate Energy Consumption and Population Numbers", warning=FALSE}
+```{r figure2, out.width= "70%", fig.cap= "Aggregate Energy Consumption and Population Numbers", warning=FALSE}
 ggplot(df_avg_sum,aes(x=year)) + 
-  geom_line(aes(y=Sum_kWh),colour="black", size = 1) +
-  geom_line(aes(y=Sum_Population_M*130),colour='blue', size=1) +
+  geom_line(aes(y=Sum_kWh,colour="Energy"), size = 1) +
+  geom_line(aes(y=Sum_Population_M*130,colour='Population'), size=1) +
   scale_y_continuous(
     name = "Total Energy (kWh) per Capita",
     sec.axis = sec_axis(~. /130,name="Total Population (Millions)"))+
@@ -118,11 +118,11 @@ ggplot(df_avg_sum,aes(x=year)) +
 Referring to figure \@ref(fig:figure1) shows that:
 
 * *Brazil, China, India and South Korea have steadily increased Energy Consumption per Capita since 1985. While Germany has been steadily declining since 1985.*
-* *Canada, France, Japan and the United States Energy Consumption per Capita increased until approx 2003 then has steadily declined.Russia's consumption decreased until 1997 and has steadily been increasing since.*
+* *Canada, France, Japan and the United States Energy Consumption per Capita increased until approx 2003 then has steadily declined. Russia's consumption decreased until 1997 and has steadily been increasing since.*
 
 Referring to figure \@ref(fig:figure2) shows that:
 
-* *Aggregate energy consumption has overall trended upwards since 1985 with certain periods of distinct negative growth such as 2009(Post GFC) and 2020 (COVID-19 pandemic). Aggregate population numbers has increased consistently since 1985.*
+* *Aggregate energy consumption has overall trended upwards since 1985 with certain periods of distinct negative growth such as 2009(Post GFC) and 2020 (COVID-19 pandemic). Aggregate population numbers have increased consistently since 1985.*
 
 
 # Conclusion
